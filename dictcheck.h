@@ -7,16 +7,19 @@
 #include <stdbool.h>
 /** \brief
  *thoughts:
-the algorithem should return the length of the word
-longer words = more likely plain text
+the algorithm should return the length of the word
+    longer words = more likely plain text
+        maybe create an array with each position+1 representing word length
+        those keys with the most words in the higher positions of the array should be more accurate
 sudo code:
-while dict word & tested word < lenght of each word
-    check each char seq to see if matches
+while dict word & tested word < length of each word
+    check each char sequentially to see if matches
     if not skip to next dict word
 if tested word is partial of dict word and no other matches
-    the rest of the key must = that dict word
+    the rest of the key must be cypher+key=that dict word
     then need to test that key to see if the rest of the text makes sense using that key.
-    if not start over
+    if not start over bad key
+if entire decryption = words display key
  * \param
  * \param
  * \return
