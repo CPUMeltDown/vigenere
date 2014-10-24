@@ -15,6 +15,8 @@ while dict word & tested word < lenght of each word
     if not skip to next dict word
 if tested word is partial of dict word and no other matches
     the rest of the key must = that dict word
+    then need to test that key to see if the rest of the text makes sense using that key.
+    if not start over
  * \param
  * \param
  * \return
