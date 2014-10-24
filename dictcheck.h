@@ -5,6 +5,22 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+/** \brief
+ *thoughts:
+the algorithem should return the length of the word
+longer words = more likely plain text
+sudo code:
+while dict word & tested word < lenght of each word
+    check each char seq to see if matches
+    if not skip to next dict word
+if tested word is partial of dict word and no other matches
+    the rest of the key must = that dict word
+ * \param
+ * \param
+ * \return
+ *
+ */
+
 int dictcheck(char *s, size_t len)
 {
 	FILE *fp;
@@ -14,10 +30,10 @@ int dictcheck(char *s, size_t len)
 		exit(0);
 	}
 	int i=0;
-        /**< for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i) */
+	/**< for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i) */
 	while(i<len)
 	{
-	    i++;
+		i++;
 	}
 }
 #endif // DICTCHECK_H_INCLUDED
