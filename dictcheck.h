@@ -12,7 +12,7 @@ the algorithm should return the length of the word
         maybe create an array with each position+1 representing word length
         those keys with the most words in the higher positions of the array should be more accurate
 sudo code:
-while dict word & tested word < length of each word
+while dict word & tested word < length of each word  && length of tested word < length of dict word
     check each char sequentially to see if matches
     if not skip to next dict word
 if tested word is partial of dict word and no other matches
