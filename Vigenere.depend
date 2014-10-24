@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1414133846 source:c:\users\brian\desktop\dropbox\csci-385\vigenere\vigenere.c
+	"vigenere.h"
+	"dictcheck.h"
+
+1413359317 c:\users\brian\desktop\dropbox\csci-385\vigenere\vigenere.h
+
+1414135219 c:\users\brian\desktop\dropbox\csci-385\vigenere\dictcheck.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<stdbool.h>
+
