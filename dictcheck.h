@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#define MAXLEN 2048
+
 /** \brief
  *thoughts:
 the algorithm should return the length of the word
@@ -29,20 +31,23 @@ void fprintusage(FILE *fp, char* name)
   fprintf(fp, "usage: %s ciphertext\n\tciphertext: file to break\n", ++name);
 }
 
-size_t filegetline(char *s, char k, size_t lim, FILE *fp)
+size_t getcipherfile(char *s, size_t lim, FILE *fp)
 {
   int x, i;
   for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
     { 
-      // IF a-z copy
-      // else go fuck yourself
-      s[i]=x;
+      if (x > 64 && x < 91)
+	{
+	  s[i] = x;
+	}
     }
-  if (x == '\n')
-    {
-      s[i] = x;
-      ++i;
-    }
+  
+  //  if (x == '\n')
+  // {
+  //   s[i] = x;
+  //   ++i;
+  // }
+
   s[i] = '\0';
   return i;
 }
