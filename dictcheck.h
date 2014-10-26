@@ -34,6 +34,8 @@ size_t filegetline(char *s, char k, size_t lim, FILE *fp)
   int x, i;
   for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
     { 
+      // IF a-z copy
+      // else go fuck yourself
       s[i]=x;
     }
   if (x == '\n')
