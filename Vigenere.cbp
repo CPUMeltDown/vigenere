@@ -45,6 +45,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Vigenere.h" />
+		<Unit filename="dictcheck.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
