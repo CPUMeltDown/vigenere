@@ -1,5 +1,3 @@
-#ifndef DICTCHECK_H_INCLUDED
-#define DICTCHECK_H_INCLUDED
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +24,27 @@ if entire decryption = words display key
  *
  */
 
+void fprintusage(FILE *fp, char* name)
+{
+  fprintf(fp, "usage: %s ciphertext\n\tciphertext: file to break\n", ++name);
+}
+
+size_t filegetline(char *s, char k, size_t lim, FILE *fp)
+{
+  int x, i;
+  for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
+    { 
+      s[i]=x;
+    }
+  if (x == '\n')
+    {
+      s[i] = x;
+      ++i;
+    }
+  s[i] = '\0';
+  return i;
+}
+
 int dictcheck(char *s, size_t len)
 {
 	FILE *fp;
@@ -40,5 +59,5 @@ int dictcheck(char *s, size_t len)
 	{
 		i++;
 	}
+	return -1;
 }
-#endif // DICTCHECK_H_INCLUDED
