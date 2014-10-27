@@ -78,7 +78,6 @@ int main(int argc, char **argv)
 	    }
 	   searchptr = searchptr + segmentlen;
 	}
-      
       segmentptr = segmentptr + segmentlen;
     }
 

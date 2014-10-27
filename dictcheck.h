@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#define MAXLEN 2048
+#define MAXLEN 4096
 
 /** \brief
  *thoughts:
