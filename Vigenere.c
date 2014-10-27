@@ -36,36 +36,32 @@ int main(int argc, char **argv)
   strncpy(segmentptr, ciphertext, cipherlen);
   strncpy(searchptr, ciphertext, cipherlen);
   
-  //size_t segmentlen;
+  // Trigraph
   size_t segmentlen = 3;
 
-  FILE *output;
-  
-  /*  if((output= fopen("testoutput.txt", "w")) == NULL)
-    {
-      fprintf(stderr, "ERROR CREATING OUTPUT FILE!");
-      }*/
-
-
-  /* for (segmentlen = 1; segmentlen < 100; segmentlen++)
-     { */
-  fprintf(stdout, "Segment length of %zu\n", segmentlen);
   size_t occurences[cipherlen/segmentlen];
+  size_t distances[cipherlen/segmentlen];
   char *segments[cipherlen/segmentlen];
   
   int i;
   int j;
   for(i = 1; i <= (cipherlen/segmentlen); i++)
     {
-      occurences[i-1] = 0;
+
+      occurences[i-1] = 1;
+      distances[i-1] = 0;
       segments[i-1] = (char *) malloc(sizeof(char) * segmentlen);
       searchptr = segmentptr + (i * segmentlen);
+
       size_t searchlen = strlen(searchptr);
       for(j = 0; j < (searchlen/segmentlen); j++)
 	{
+	  //	  fprintf(stdout, "%s\n", segmentptr);
 	  if(strncmp(segmentptr, searchptr, segmentlen) == 0)
 	    {
+	    
 	      occurences[i-1]++;
+	      distances[i-1] = (searchptr - segmentptr);
 	      strncpy(segments[i-1], segmentptr, segmentlen);
 	      fprintf(stdout, "\nMatch FOUND! Segment length of %zu; Segment # %d, %s occurred for %zu times!\n", segmentlen, i-1, segments[i-1], occurences[i-1]);
 	    }
@@ -74,7 +70,15 @@ int main(int argc, char **argv)
 	}
       segmentptr = segmentptr + segmentlen;
     }
+
+  for(i = 1; i <= (cipherlen/segmentlen); i++)
+{
   
-  // }
-  dictcheck("a", 1);
+  if(distances[i-1] != 0)
+    {
+      fprintf(stdout, "%zu ", distances[i-1]);
+    }
+ }
+  
+  //  dictcheck("a", 1);
 }

@@ -37,9 +37,11 @@ size_t getcipherfile(char *s, size_t lim, FILE *fp)
   for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
     { 
       if (x > 64 && x < 91)
-	{
-	  s[i] = x;
-	}
+      	{
+	   s[i] = x;
+      	}
+      //  s[i] = x;
+   
     }
   
   //  if (x == '\n')
@@ -67,4 +69,32 @@ int dictcheck(char *s, size_t len)
 		i++;
 	}
 	return -1;
+}
+
+unsigned gcd(unsigned x, unsigned y){
+  unsigned wk;
+  if(x<y){ wk=x;x=y;y=wk; }
+  while(y){
+    wk = x%y;
+    x=y;
+    y=wk;
+  }
+  return x;
+}
+
+int gcd_a(int n, int a[n]){
+  if(n==1) return a[0];
+  if(n==2) return gcd(a[0], a[1]);
+  int h = n / 2;
+  return gcd(gcd_a(h, &a[h-1]), gcd_a(n - h, &a[h]));
+}
+
+/* Standard C Function: Greatest Common Divisor */
+int single_gcd( int a, int b )
+{
+  int c;
+  while ( a != 0 ) {
+    c = a; a = b%a;  b = c;
+  }
+  return b;
 }
