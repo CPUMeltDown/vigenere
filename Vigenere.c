@@ -30,55 +30,66 @@ int main(int argc, char **argv)
 
   size_t cipherlen = strlen(ciphertext);
   
-  char * segmentptr = (char *)malloc(sizeof(char) * cipherlen);
-  char * searchptr = (char *)malloc(sizeof(char) * cipherlen);
+  char * segmentptr = (char *)malloc(sizeof(char) * cipherlen + 1);
+  char * searchptr = (char *)malloc(sizeof(char) * cipherlen + 1);
 
   strncpy(segmentptr, ciphertext, cipherlen);
   strncpy(searchptr, ciphertext, cipherlen);
-  
+  segmentptr[cipherlen] = '\0';
+  searchptr[cipherlen] = '\0';
+
   // Trigraph
   size_t segmentlen = 3;
 
-  size_t occurences[cipherlen/segmentlen];
-  size_t distances[cipherlen/segmentlen];
-  char *segments[cipherlen/segmentlen];
+  size_t occurencelen = cipherlen/segmentlen;
+
+  size_t occurences[occurencelen];
+  size_t distances[occurencelen];
+  char *segments[occurencelen];
   
   int i;
   int j;
-  for(i = 1; i <= (cipherlen/segmentlen); i++)
+  for(i = 1; i <= occurencelen; i++)
     {
 
       occurences[i-1] = 1;
       distances[i-1] = 0;
       segments[i-1] = (char *) malloc(sizeof(char) * segmentlen);
-      searchptr = segmentptr + (i * segmentlen);
+      searchptr = segmentptr + (segmentlen);
 
       size_t searchlen = strlen(searchptr);
-      for(j = 0; j < (searchlen/segmentlen); j++)
+      size_t searchoccurencelen = searchlen/segmentlen;
+
+      char *segmentcheck = (char *) malloc(sizeof(char) * segmentlen);
+      char *searchcheck= (char*) malloc(sizeof(char) * segmentlen);
+      strncpy(segmentcheck, segmentptr,segmentlen);
+      
+      for(j = 1; j <= searchoccurencelen; j++)
 	{
-	  //	  fprintf(stdout, "%s\n", segmentptr);
-	  if(strncmp(segmentptr, searchptr, segmentlen) == 0)
+	  strncpy(searchcheck, searchptr, segmentlen);
+	  // fprintf(stdout, "Comparing %s with %s\n", segmentcheck, searchcheck);
+	  if(strncmp(segmentcheck, searchcheck, segmentlen) == 0)
 	    {
-	    
+
 	      occurences[i-1]++;
 	      distances[i-1] = (searchptr - segmentptr);
 	      strncpy(segments[i-1], segmentptr, segmentlen);
-	      fprintf(stdout, "\nMatch FOUND! Segment length of %zu; Segment # %d, %s occurred for %zu times!\n", segmentlen, i-1, segments[i-1], occurences[i-1]);
+	      fprintf(stdout, "\nMatch FOUND! Segment length of %zu; Segment # %d, %s occurred for the %zu time and has a distance of %zu!\n", segmentlen, i, segments[i-1], occurences[i-1], distances[i-1]);
 	    }
-	  
-	  searchptr = searchptr + segmentlen;
+	   searchptr = searchptr + segmentlen;
 	}
+      
       segmentptr = segmentptr + segmentlen;
     }
 
-  for(i = 1; i <= (cipherlen/segmentlen); i++)
-{
-  
-  if(distances[i-1] != 0)
+  for(i = 1; i <= (occurencelen); i++)
     {
-      fprintf(stdout, "%zu ", distances[i-1]);
+      if(distances[i-1] != 0)
+	{
+	  fprintf(stdout, "%zu ", distances[i-1]);
+	}
     }
- }
+  fprintf(stdout, "\n");
   
   //  dictcheck("a", 1);
 }
