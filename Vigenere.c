@@ -39,39 +39,41 @@ int main(int argc, char **argv)
   searchtriptr[cipherlen] = '\0';
 
   // Find the occurences for each trigraph
-    
-    // Tri is 3!
+  
+  // Tri is 3!
   size_t tri = 3;
-
-    // How many trigraphs in the ciphertext
+  
+  // How many trigraphs in the ciphertext
   size_t trigraphcount = cipherlen/tri;
-
-    // Number of occurences of the trigraph
+  
+  // Number of occurences of the trigraph
   size_t occurences[trigraphcount];
-
-    // The trigraphs themselves.
+  
+  // The trigraphs themselves.
   char *trigraphs[trigraphcount];
   
   int i;
   int j;
-    
-    // Outer loop, for each trigraph in the ciphertext.
+  
+  // Outer loop, for each trigraph in the ciphertext.
   for(i = 1; i <= trigraphcount; i++)
     {
-
+      
       occurences[i-1] = 1;
-
+      
       trigraphs[i-1] = (char *) malloc(sizeof(char) * tri);
       searchtriptr = trigraphptr + (tri);
-
-        // length of the remaining cipher text being searched.
+      
+      // length of the remaining cipher text being searched.
       size_t searchlen = strlen(searchtriptr);
-        // Count of trigraphs in the remaining cipher text.
+      
+      // Count of trigraphs in the remaining cipher text.
       size_t searchtricount = searchlen/tri;
-
-        // Current trigraph that is being searched for.
+      
+      // Current trigraph that is being searched for.
       char *currenttrigraph = (char *) malloc(sizeof(char) * tri);
-        // Current trigraph in search.
+      
+      // Current trigraph in search.
       char *currenttrisearch= (char*) malloc(sizeof(char) * tri);
         
       strncpy(currenttrigraph, trigraphptr, tri);
@@ -83,15 +85,16 @@ int main(int argc, char **argv)
 	  // fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
 	  if(strncmp(currenttrigraph, currenttrisearch, tri) == 0)
 	    {
-
+	
 	      occurences[i-1]++;
 	      strncpy(trigraphs[i-1], trigraphptr, tri);
-	      //   fprintf(stdout, "\nMatch FOUND! Segment length of %zu; Segment # %d, %s occurred for the %zu time and has a distance of %zu!\n", tri, i, trigraphs[i-1], occurences[i-1], distances[i-1]);
 	    }
         
-        // Point to the next 3 characters
-	   searchtriptr = searchtriptr + tri;
+	  // Point to the next 3 characters.
+	  searchtriptr = searchtriptr + tri;
 	}
+
+      // Point to the next 3 characters.
       trigraphptr = trigraphptr + tri;
     }
 
@@ -130,7 +133,8 @@ int main(int argc, char **argv)
 	  if(previousloc != 0) 
 	    {
 	      currentloc = trigraphptr;
-  	      distances[j] = (currentloc - previousloc);
+	      distances[j] = (currentloc - previousloc) - tri;
+	      //  distances[j] = distances[j] - (i * tri);
 	      fprintf(stdout, "MatchFound with a distance of %zu\n", distances[j]);
 	      j++;
 	    }
