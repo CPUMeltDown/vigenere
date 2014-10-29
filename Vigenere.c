@@ -81,9 +81,9 @@ int main(int argc, char **argv)
 	  //fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
 	  if(strncmp(currenttrigraph, currenttrisearch, 3) == 0)
 	    {
-	
+	      
 	      occurences[i]++;
-	      strncpy(trigraphs[i], trigraphptr, 3);
+	      strncpy(trigraphs[i], currenttrisearch, 3);
 	    }
         
 	  // Point to the next 3 characters.
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 	  if(previousloc != 0) 
 	    {
 	      currentloc = trigraphptr;
-	      distances[j] = (currentloc - previousloc) - 3;
+	      distances[j] = (currentloc - previousloc);
 	      j++;
 	    }
 	  previousloc = trigraphptr;
@@ -146,5 +146,85 @@ int main(int argc, char **argv)
       fprintf(stdout, "%zu ", distances[i]);
     }
   fprintf(stdout, "\n");
+
+  int keylen = gcdr(distances[0], distances[1]);
+
+  fprintf(stdout, "Possible key length is %d\n", keylen);
+  
+  // Frequncy analysis
+  
+  char characters[26];
+  int frequencies[keylen][26];
+
+  char key[keylen];
+  char seckey[keylen];
+  char thirdkey[keylen];
+  char fourkey[keylen];
+  char fifkey[keylen];
+  int index;
+
+  for(i = 0; i < keylen; i++)
+    {
+      // initialize frequencies                                                                                                                                                          
+      for (j = 0; j< 26; j++)
+	{
+	  frequencies[i][j] = 0;
+	}
+      
+      for(j = 0; j < cipherlen/keylen; j++)
+	{
+	  index = (j * keylen) + i;
+	  frequencies[i][ciphertext[index] - 'A']++;
+
+	}
+      
+      int highfreq = -1;
+      int highfreqindex = -1;
+      int sechighfreqindex = -1;
+      int thirdhighfreqindex = -1;
+      int fourhighfreqindex = -1;
+      int fifhighfreqindex = -1;
+      
+      for(j = 0; j < 26; j++)
+	{
+	  if(frequencies[i][j] > highfreq)
+	    {
+	      fifhighfreqindex = fourhighfreqindex;
+	      fourhighfreqindex = thirdhighfreqindex;
+	      thirdhighfreqindex = sechighfreqindex;
+	      sechighfreqindex = highfreqindex;
+	      highfreqindex = j;
+	      highfreq = frequencies[i][j];
+	    }
+	}
+
+      int keypos = (highfreqindex - 4);
+      int seckeypos = (sechighfreqindex - 4);
+      int thirdkeypos = (thirdhighfreqindex - 4);
+      int fourkeypos = (fourhighfreqindex - 4);
+      int fifkeypos = (fifhighfreqindex - 4);
+      
+      keypos += keypos < 0 ? 26 : 0;
+      seckeypos += seckeypos < 0 ? 26 : 0;
+      thirdkeypos += thirdkeypos < 0 ? 26 : 0;
+      fourkeypos += fourkeypos < 0 ? 26 : 0;
+      fifkeypos += fifkeypos < 0 ? 26 : 0;
+      
+      //       fprintf(stdout, "Highest frequency letter at key pos %d is %c\n", highfreqindex, highfreqindex + 'A');
+      //fprintf(stdout, "Key char at this index must be %c\n", (keypos) + 'A');
+      key[i] = keypos + 'A';
+      seckey[i] = seckeypos + 'A';
+      thirdkey[i] = thirdkeypos + 'A';
+      fourkey[i] = fourkeypos + 'A';
+      fifkey[i] = fifkeypos + 'A';
+    }
+  
+  fprintf(stdout, "Probable key is %s\n", key);
+  fprintf(stdout, "Second probable key is %s\n", seckey);
+  fprintf(stdout, "Third probable key is %s\n", thirdkey);
+  fprintf(stdout, "Fourth probable key is %s\n", fourkey);
+  fprintf(stdout, "Fifth probable key is %s\n", fifkey);
+  
+  // Decrypt
   //  dictcheck("a", 1);
 }
