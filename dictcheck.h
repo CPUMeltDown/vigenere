@@ -79,8 +79,7 @@ size_t encrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
             {
               keyindex++;
             }
-	  //  keyindex = keyindex == (keylen - 1) ? 0 : keyindex++;
-	}
+		}
       else
       	{
       	  s[i]=x;
@@ -88,10 +87,10 @@ size_t encrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
 
     }
   if (x == '\n')                                                                                                                                                                  
-   {
-     s[i] = x;
-     ++i;
-   }   
+    {
+      s[i] = x;
+      ++i;
+    }   
   s[i] = '\0';
   return i;
 }
@@ -101,7 +100,7 @@ size_t decrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
   int y, i;
   for (i = 0; i < (lim-1) && (y = toupper(getc(fp))) != EOF && y != '\n'; ++i)
     {
-
+      
       if (y > 64 && y < 91)
         {
 
@@ -111,12 +110,11 @@ size_t decrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
 	    {
 	      keyindex = 0;
 	    }
-	  //  else
-	  //{
-	  //  keyindex++;
-	  //}
-	  //          keyindex = keyindex == (keylen - 1) ? 0 : keyindex++;
-        }
+	  else
+	    {
+	      keyindex++;
+	    }
+	}
       else
       {
          s[i]=y;
