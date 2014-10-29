@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#define MAXLEN 4096
+#define MAXLEN 10000
 
 /** \brief
  *thoughts:
@@ -44,8 +44,17 @@ size_t getcipherfile(char *s, size_t lim, FILE *fp)
     { 
       if (x > 64 && x < 91)
       	{
-	   s[i] = x;
+	  s[i] = x;
       	}
+      else
+	{
+	  s[i]=x;
+	}
+    }
+  if (x == '\n')
+    {
+      s[i] = x;
+      ++i;
     }
   
   s[i] = '\0';
@@ -57,7 +66,7 @@ size_t encrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
   int x, i;
   for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
     { 
-
+      
       if (x > 64 && x < 91)
 	{
 	  s[i] = mod((x - 65)+ key[keyindex], 26) + 65;
@@ -73,16 +82,16 @@ size_t encrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
 	  //  keyindex = keyindex == (keylen - 1) ? 0 : keyindex++;
 	}
       else
-	{
-	  s[i]=x;
-	}
+      	{
+      	  s[i]=x;
+      	}
 
     }
   if (x == '\n')                                                                                                                                                                  
-    {
-      s[i] = x;
-      ++i;
-    }   
+   {
+     s[i] = x;
+     ++i;
+   }   
   s[i] = '\0';
   return i;
 }
@@ -102,23 +111,23 @@ size_t decrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
 	    {
 	      keyindex = 0;
 	    }
-	  else
-	    {
-	      keyindex++;
-	    }
+	  //  else
+	  //{
+	  //  keyindex++;
+	  //}
 	  //          keyindex = keyindex == (keylen - 1) ? 0 : keyindex++;
         }
       else
-	{
-          s[i]=y;
-	}
+      {
+         s[i]=y;
+      	}
       
     }
   if (y == '\n')
-    {
-      s[i] = y;
-      ++i;
-    }
+   {
+     s[i] = y;
+     ++i;
+   }
   s[i] = '\0';
   return i;
 }

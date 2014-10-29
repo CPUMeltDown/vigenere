@@ -87,7 +87,7 @@ int main(int argc, char **argv)
       strncat(ciphertext, buf, strlen(buf));
     }
 
-  fprintf(stdout, "%s", ciphertext);
+  //  fprintf(stdout, "%s\n", ciphertext);
   
   size_t cipherlen = strlen(ciphertext);
   
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
   strncpy(trigraphptr, ciphertext, cipherlen);
   strncpy(searchtriptr, ciphertext, cipherlen);
-  trigraphptr[cipherlen] = '\0';
+  trigraphptr[cipherlen] = '\0'; 
   searchtriptr[cipherlen] = '\0';
 
   // Find the occurences for each trigraph
