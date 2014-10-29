@@ -4,30 +4,91 @@ int main(int argc, char **argv)
 
   char ciphertext[MAXLEN];
   char buf[MAXLEN];
-  FILE *cipherfp;
+  FILE *fp;
   int len;
-
-  if (argc != 2)
+  int keylength;
+  
+  switch(argc)
     {
-      // Incorrect arguments print usage and exit.
+    case 3:
+      if(strlen(argv[1]) > 1)
+	{
+	  fprintusage(stderr, ++argv[0]);
+	  exit(0);
+	}
+      // Break operation                                                                                                                                                                 
+      // Open ciphertext file.                                                                                                                                                           
+      if((fp = fopen(argv[2], "r")) == NULL)
+	{
+	  fprintf(stderr, "FILE %s MISSING OR BROKEN!\n", argv[2]);
+	  exit(0);
+	}
+
+      break;
+
+    case 4:
+      if(strlen(argv[1]) > 1)
+	{
+	  fprintusage(stderr, ++argv[0]);
+	  exit(0);
+	}
+      keylength = strlen(argv[2]);
+      if(keylength > 100)
+	{
+	  fprintusage(stderr, ++argv[0]);
+	  exit(0);
+	}
+
+      if((fp = fopen(argv[3], "r")) == NULL)
+        {
+          fprintf(stderr, "FILE %s MISSING OR BROKEN!\n", argv[2]);
+          exit(0);
+        }
+      break;
+      
+    default:
       fprintusage(stderr, ++argv[0]);
       exit(0);
+      break;
     }
-  
 
-  // Open ciphertext file.
-  if((cipherfp = fopen(argv[1], "r")) == NULL)
+  char *keyed = (char *) malloc(sizeof(char) * keylength);
+  int keyindex = 0;
+  if(toupper(argv[1][0]) == 'E')
     {
-      fprintf(stderr, "FILE %s MISSING OR BROKEN!\n", argv[1]);
+      strncpy(keyed, argv[2], keylength);
+      // Encryption                                                                                                                                                              
+      while((len = encrypt(buf, keyed, keyindex, keylength, MAXLEN, fp)) > 0)
+	{
+	   fprintf(stdout, "%s", buf);
+	}
+      fprintf(stdout, "\n");
       exit(0);
     }
 
-  // Copy text from cipher file into ciphertext string.
-  while((len = getcipherfile(buf, MAXLEN, cipherfp)) > 0)
+  if(toupper(argv[1][0]) == 'D')
+    {
+      strncpy(keyed, argv[2], keylength);
+      // Decryption
+      while((len = decrypt(buf, keyed, keyindex, keylength, MAXLEN, fp)) > 0)
+        {
+	   fprintf(stdout, "%s", buf);
+        }
+      fprintf(stdout, "\n");
+      exit(0);
+    }
+
+  // Break operation from here
+
+  // Copy text from cipher file into ciphertext string.                                                                                                                         \
+                                                                                                                                                                                     
+  while((len = getcipherfile(buf, MAXLEN, fp)) > 0)
     {
       strncat(ciphertext, buf, strlen(buf));
     }
 
+  fprintf(stdout, "%s", ciphertext);
+  
   size_t cipherlen = strlen(ciphertext);
   
   char * trigraphptr = (char *)malloc(sizeof(char) * cipherlen + 1);
@@ -47,7 +108,7 @@ int main(int argc, char **argv)
   
   // The trigraphs themselves.
   char *trigraphs[trigraphcount];
-  
+   
   // Current trigraph that is being searched for.                                                                                                                                
   char *currenttrigraph = (char *) malloc(sizeof(char) * 3);
 
@@ -78,7 +139,7 @@ int main(int argc, char **argv)
       for(j = 0; j < searchtricount; j++)
 	{
 	  strncpy(currenttrisearch, searchtriptr, 3);
-	  //fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
+	  // fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
 	  if(strncmp(currenttrigraph, currenttrisearch, 3) == 0)
 	    {
 	      
@@ -145,6 +206,7 @@ int main(int argc, char **argv)
     {
       fprintf(stdout, "%zu ", distances[i]);
     }
+
   fprintf(stdout, "\n");
 
   int keylen = gcdr(distances[0], distances[1]);
@@ -156,13 +218,19 @@ int main(int argc, char **argv)
   char characters[26];
   int frequencies[keylen][26];
 
-  char key[keylen];
-  char seckey[keylen];
-  char thirdkey[keylen];
-  char fourkey[keylen];
-  char fifkey[keylen];
+  char key[keylen + 1];
+  char seckey[keylen + 1];
+  char thirdkey[keylen + 1];
+  char fourkey[keylen + 1];
+  char fifkey[keylen + 1];
   int index;
 
+  key[keylen] = '\0';
+  seckey[keylen] = '\0';
+  thirdkey[keylen] = '\0';
+  fourkey[keylen] = '\0';
+  fifkey[keylen] = '\0';
+  
   for(i = 0; i < keylen; i++)
     {
       // initialize frequencies                                                                                                                                                          
