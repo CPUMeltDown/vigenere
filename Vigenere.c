@@ -39,12 +39,8 @@ int main(int argc, char **argv)
   searchtriptr[cipherlen] = '\0';
 
   // Find the occurences for each trigraph
-  
-  // Tri is 3!
-  size_t tri = 3;
-  
   // How many trigraphs in the ciphertext
-  size_t trigraphcount = cipherlen/tri;
+  size_t trigraphcount = cipherlen - 2;
   
   // Number of occurences of the trigraph
   size_t occurences[trigraphcount];
@@ -52,73 +48,76 @@ int main(int argc, char **argv)
   // The trigraphs themselves.
   char *trigraphs[trigraphcount];
   
+  // Current trigraph that is being searched for.                                                                                                                                
+  char *currenttrigraph = (char *) malloc(sizeof(char) * 3);
+
+  // Current trigraph in search.                                                                                                                                                 
+  char *currenttrisearch= (char*) malloc(sizeof(char) * 3);
+
   int i;
   int j;
   
   // Outer loop, for each trigraph in the ciphertext.
-  for(i = 1; i <= trigraphcount; i++)
+  for(i = 0; i < trigraphcount; i++)
     {
       
-      occurences[i-1] = 1;
+      occurences[i] = 1;
       
-      trigraphs[i-1] = (char *) malloc(sizeof(char) * tri);
-      searchtriptr = trigraphptr + (tri);
+      trigraphs[i] = (char *) malloc(sizeof(char) * 3);
+      searchtriptr = trigraphptr + 1;
       
       // length of the remaining cipher text being searched.
       size_t searchlen = strlen(searchtriptr);
       
       // Count of trigraphs in the remaining cipher text.
-      size_t searchtricount = searchlen/tri;
+      size_t searchtricount = searchlen - 2;
       
-      // Current trigraph that is being searched for.
-      char *currenttrigraph = (char *) malloc(sizeof(char) * tri);
-      
-      // Current trigraph in search.
-      char *currenttrisearch= (char*) malloc(sizeof(char) * tri);
-        
-      strncpy(currenttrigraph, trigraphptr, tri);
+      strncpy(currenttrigraph, trigraphptr, 3);
       
         // Inner loop, for each following trigraph.
-      for(j = 1; j <= searchtricount; j++)
+      for(j = 0; j < searchtricount; j++)
 	{
-	  strncpy(currenttrisearch, searchtriptr, tri);
-	  // fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
-	  if(strncmp(currenttrigraph, currenttrisearch, tri) == 0)
+	  strncpy(currenttrisearch, searchtriptr, 3);
+	  //fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
+	  if(strncmp(currenttrigraph, currenttrisearch, 3) == 0)
 	    {
 	
-	      occurences[i-1]++;
-	      strncpy(trigraphs[i-1], trigraphptr, tri);
+	      occurences[i]++;
+	      strncpy(trigraphs[i], trigraphptr, 3);
 	    }
         
 	  // Point to the next 3 characters.
-	  searchtriptr = searchtriptr + tri;
+	  searchtriptr = searchtriptr + 1;
 	}
 
       // Point to the next 3 characters.
-      trigraphptr = trigraphptr + tri;
+      trigraphptr = trigraphptr + 1;
     }
 
   // Distances between the trigraph occurences.
   int highest = 0;
-
+  int highestcount = 0;
   for(i = 0; i < trigraphcount; i++)
     {
-      if(occurences[i] > highest)
+      //      fprintf(stdout, "Occurence %d is %s with %zu occurences.\n", i+1, trigraphs[i], occurences[i]);
+      // fprintf(stdout, "Highest now is %d\n", highest);
+      if(occurences[i] > highestcount)
 	{
+	  //  fprintf(stdout, "Occurence %zu is %s\n", occurences[i], trigraphs[i]);
+	  highestcount = occurences[i];
 	  highest = i;
 	}
     }
 
   fprintf(stdout, "Highest is %zu, and the segment is %s\n", occurences[highest], trigraphs[highest]);
   
-
   // loop through ciphertext adding distances between occurences
   char *previousloc = 0;
   char *currentloc = 0;
-  size_t distances[occurences[highest]];
+  size_t distances[occurences[highest] - 1];
 
   // Initialize distances.
-  for(i = 0; i < occurences[highest]; i++)
+  for(i = 0; i < occurences[highest] - 1; i++)
     {
       distances[i] = 0;
     }
@@ -127,20 +126,25 @@ int main(int argc, char **argv)
   j = 0;
   for(i = 0; i < trigraphcount; i++)
     {
-      
-      if(strncmp(trigraphptr, trigraphs[highest], tri) == 0)
+ 
+      strncpy(currenttrigraph, trigraphptr, 3);
+      if(strncmp(currenttrigraph, trigraphs[highest], 3) == 0)
 	{
 	  if(previousloc != 0) 
 	    {
 	      currentloc = trigraphptr;
-	      distances[j] = (currentloc - previousloc) - tri;
-	      //  distances[j] = distances[j] - (i * tri);
-	      fprintf(stdout, "MatchFound with a distance of %zu\n", distances[j]);
+	      distances[j] = (currentloc - previousloc) - 3;
 	      j++;
 	    }
 	  previousloc = trigraphptr;
 	}
-      trigraphptr = trigraphptr + tri;
+      trigraphptr = trigraphptr + 1;
     }
+					       
+  for (i = 0; i < occurences[highest] - 1; i++)
+    {
+      fprintf(stdout, "%zu ", distances[i]);
+    }
+  fprintf(stdout, "\n");
   //  dictcheck("a", 1);
 }
