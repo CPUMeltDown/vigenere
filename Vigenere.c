@@ -132,9 +132,11 @@ int main(int argc, char **argv)
       
       // Count of trigraphs in the remaining cipher text.
       size_t searchtricount = searchlen - 2;
-      
+
       strncpy(currenttrigraph, trigraphptr, 3);
       
+      if(currenttrigraph[0] > 64 && currenttrigraph[0] < 91 && currenttrigraph[1] > 64 && currenttrigraph[1] < 91 && currenttrigraph[2] >64 && currenttrigraph[2] < 91)
+	{
         // Inner loop, for each following trigraph.
       for(j = 0; j < searchtricount; j++)
 	{
@@ -150,7 +152,8 @@ int main(int argc, char **argv)
 	  // Point to the next 3 characters.
 	  searchtriptr = searchtriptr + 1;
 	}
-
+      
+	}
       // Point to the next 3 characters.
       trigraphptr = trigraphptr + 1;
     }
@@ -209,7 +212,7 @@ int main(int argc, char **argv)
 
   fprintf(stdout, "\n");
 
-  int keylen = gcdr(distances[0], distances[1]);
+   int keylen = gcdr(distances[0], distances[1]);
 
   fprintf(stdout, "Possible key length is %d\n", keylen);
   

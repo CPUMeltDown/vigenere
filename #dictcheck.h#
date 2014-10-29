@@ -46,7 +46,7 @@ size_t getcipherfile(char *s, size_t lim, FILE *fp)
       	{
 	  s[i] = x;
       	}
-       else
+      else
       	{
       	  s[i]=x;
       	}

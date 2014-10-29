@@ -132,9 +132,11 @@ int main(int argc, char **argv)
       
       // Count of trigraphs in the remaining cipher text.
       size_t searchtricount = searchlen - 2;
-      
+
       strncpy(currenttrigraph, trigraphptr, 3);
       
+      if(currenttrigraph[0] > 64 && currenttrigraph[0] < 91 && currenttrigraph[1] > 64 && currenttrigraph[1] < 91 && currenttrigraph[2] >64 && currenttrigraph[2] < 91)
+	{
         // Inner loop, for each following trigraph.
       for(j = 0; j < searchtricount; j++)
 	{
@@ -150,11 +152,12 @@ int main(int argc, char **argv)
 	  // Point to the next 3 characters.
 	  searchtriptr = searchtriptr + 1;
 	}
-
+      
+	}
       // Point to the next 3 characters.
       trigraphptr = trigraphptr + 1;
     }
-
+ 
   // Distances between the trigraph occurences.
   int highest = 0;
   int highestcount = 0;
