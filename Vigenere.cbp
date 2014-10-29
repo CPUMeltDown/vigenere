@@ -31,9 +31,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="main.c">
+		<Unit filename="Vigenere.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="Vigenere.h" />
+		<Unit filename="dictcheck.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
