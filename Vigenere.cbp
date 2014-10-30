@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="b C:\Users\Brian\Desktop\Dropbox\CSCI-385\Vigenere\cipher.txt" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -36,6 +37,7 @@
 		</Unit>
 		<Unit filename="Vigenere.h" />
 		<Unit filename="dictcheck.h" />
+		<Unit filename="mcgcd.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
