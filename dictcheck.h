@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include "mcgcd.h"
 #define MAXLEN 100000
 
 /** \brief
@@ -28,106 +29,100 @@ if entire decryption = words display key
 
 void fprintusage(FILE *fp, char* name)
 {
-  fprintf(fp, "usage: %s operation key plaintext/ciphertext\n\toperation: E for encryption, D for decryption, or B for break\n\tkey: key used for encryption or decryption operation 100 character maximum\n\tplaintext/ciphertext: file to be encrypted, decrypted, or broken\n", ++name);
+	fprintf(fp, "usage: %s operation key plaintext/ciphertext\n\toperation: E for encryption, D for decryption, or B for break\n\tkey: key used for encryption or decryption operation 100 character maximum\n\tplaintext/ciphertext: file to be encrypted, decrypted, or broken\n", ++name);
 }
 
 int mod(int a, int b)
 {
-  int r = a % b;
-  return r < 0 ? r + b : r;
+	int r = a % b;
+	return r < 0 ? r + b : r;
 }
 
 size_t getcipherfile(char *s, size_t lim, FILE *fp)
 {
-  int x, i;
-  for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
-    { 
-      if (x > 64 && x < 91)
-      	{
-	  s[i] = x;
-      	}
-      else
-      	{
-      	  s[i]=x;
-      	}
-    }
-  if (x == '\n')
-    {
-      s[i] = x;
-      ++i;
-    }
-  
-  s[i] = '\0';
-  return i;
+	int x, i;
+	for(i = 0; i < (lim - 1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
+	{
+		if(x > 64 && x < 91)
+		{
+			s[i] = x;
+		}
+		else
+		{
+			s[i] = x;
+		}
+	}
+	if(x == '\n')
+	{
+		s[i] = x;
+		++i;
+	}
+	s[i] = '\0';
+	return i;
 }
 
 size_t encrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *fp)
 {
-  int x, i;
-  for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
-    { 
-      
-      if (x > 64 && x < 91)
+	int x, i;
+	for(i = 0; i < (lim - 1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i)
 	{
-	  s[i] = mod((x - 65)+ key[keyindex], 26) + 65;
-	  // fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], x, s[i]);
-	  if(keyindex == (keylen - 1))
-            {
-              keyindex = 0;
-            }
-          else
-            {
-              keyindex++;
-            }
+		if(x > 64 && x < 91)
+		{
+			s[i] = mod((x - 65) + key[keyindex], 26) + 65;
+			// fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], x, s[i]);
+			if(keyindex == (keylen - 1))
+			{
+				keyindex = 0;
+			}
+			else
+			{
+				keyindex++;
+			}
 		}
-      else
-      	{
-      	  s[i]=x;
-      	}
-
-    }
-  if (x == '\n')                                                                                                                                                                  
-    {
-      s[i] = x;
-      ++i;
-    }   
-  s[i] = '\0';
-  return i;
+		else
+		{
+			s[i] = x;
+		}
+	}
+	if(x == '\n')
+	{
+		s[i] = x;
+		++i;
+	}
+	s[i] = '\0';
+	return i;
 }
 
 size_t decrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *fp)
 {
-  int y, i;
-  for (i = 0; i < (lim-1) && (y = toupper(getc(fp))) != EOF && y != '\n'; ++i)
-    {
-      
-      if (y > 64 && y < 91)
-        {
-
-          s[i] = mod((y - 65) - key[keyindex], 26) + 65;
-	  //	  fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], y, s[i]);
-	  if(keyindex == (keylen - 1))
-	    {
-	      keyindex = 0;
-	    }
-	  else
-	    {
-	      keyindex++;
-	    }
+	int y, i;
+	for(i = 0; i < (lim - 1) && (y = toupper(getc(fp))) != EOF && y != '\n'; ++i)
+	{
+		if(y > 64 && y < 91)
+		{
+			s[i] = mod((y - 65) - key[keyindex], 26) + 65;
+			//	  fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], y, s[i]);
+			if(keyindex == (keylen - 1))
+			{
+				keyindex = 0;
+			}
+			else
+			{
+				keyindex++;
+			}
+		}
+		else
+		{
+			s[i] = y;
+		}
 	}
-      else
-      {
-         s[i]=y;
-      	}
-      
-    }
-  if (y == '\n')
-   {
-     s[i] = y;
-     ++i;
-   }
-  s[i] = '\0';
-  return i;
+	if(y == '\n')
+	{
+		s[i] = y;
+		++i;
+	}
+	s[i] = '\0';
+	return i;
 }
 
 int dictcheck(char *s, size_t len)
@@ -138,28 +133,28 @@ int dictcheck(char *s, size_t len)
 		fprintf(stderr, "DICTIONARY NOT FOUND!\n");
 		exit(0);
 	}
-	int i=0;
+	int i = 0;
 	/**< for (i = 0; i < (lim-1) && (x = toupper(getc(fp))) != EOF && x != '\n'; ++i) */
-	while(i<len)
+	while(i < len)
 	{
 		i++;
 	}
 	return -1;
 }
-
-/* Standard C Function: Greatest Common Divisor */
-int gcd ( int a, int b )
-{
-  int c;
-  while ( a != 0 ) {
-    c = a; a = b%a;  b = c;
-  }
-  return b;
-}
-
-/* Recursive Standard C Function: Greatest Common Divisor */
-int gcdr ( int a, int b )
-{
-  if ( a==0 ) return b;
-  return gcdr ( b%a, a );
-}
+//
+///* Standard C Function: Greatest Common Divisor */
+//int gcd ( int a, int b )
+//{
+//  int c;
+//  while ( a != 0 ) {
+//    c = a; a = b%a;  b = c;
+//  }
+//  return b;
+//}
+//
+///* Recursive Standard C Function: Greatest Common Divisor */
+//int gcdr ( int a, int b )
+//{
+//  if ( a==0 ) return b;
+//  return gcdr ( b%a, a );
+//}

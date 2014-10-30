@@ -56,7 +56,7 @@ int mcgcd(int a[], int len)
 			++countofgcds[currentgcd];
 			if(countofgcds[currentgcd] > mcgcdcount)
 			{
-			    mgcdcount=countofgcds[currentgcd];
+				mcgcdcount = countofgcds[currentgcd];
 				mcgcd = currentgcd;
 			}
 		}
