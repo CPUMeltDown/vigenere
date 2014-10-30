@@ -137,27 +137,26 @@ int main(int argc, char **argv)
       
       if(currenttrigraph[0] > 64 && currenttrigraph[0] < 91 && currenttrigraph[1] > 64 && currenttrigraph[1] < 91 && currenttrigraph[2] >64 && currenttrigraph[2] < 91)
 	{
-        // Inner loop, for each following trigraph.
-      for(j = 0; j < searchtricount; j++)
-	{
-	  strncpy(currenttrisearch, searchtriptr, 3);
-	  // fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
-	  if(strncmp(currenttrigraph, currenttrisearch, 3) == 0)
+	  // Inner loop, for each following trigraph.
+	  for(j = 0; j < searchtricount; j++)
 	    {
+	      strncpy(currenttrisearch, searchtriptr, 3);
+	      // fprintf(stdout, "Comparing %s with %s\n", currenttrigraph, currenttrisearch);
+	      if(strncmp(currenttrigraph, currenttrisearch, 3) == 0)
+		{
+		  occurences[i]++;
+		  strncpy(trigraphs[i], currenttrisearch, 3);
+		}
 	      
-	      occurences[i]++;
-	      strncpy(trigraphs[i], currenttrisearch, 3);
+	      // Point to the next 3 characters.
+	      searchtriptr = searchtriptr + 1;
 	    }
-        
-	  // Point to the next 3 characters.
-	  searchtriptr = searchtriptr + 1;
-	}
-      
+	  
 	}
       // Point to the next 3 characters.
       trigraphptr = trigraphptr + 1;
     }
-
+  
   // Distances between the trigraph occurences.
   int highest = 0;
   int highestcount = 0;
@@ -173,7 +172,7 @@ int main(int argc, char **argv)
 	}
     }
 
-  fprintf(stdout, "Highest is %zu, and the segment is %s\n", occurences[highest], trigraphs[highest]);
+  // fprintf(stdout, "Highest occuring trigraph is %s with %zu occurences.\n", trigraphs[highest], occurences[highest]);
   
   // loop through ciphertext adding distances between occurences
   char *previousloc = 0;
@@ -186,19 +185,25 @@ int main(int argc, char **argv)
       distances[i] = 0;
     }
   
+  int specialcount = 0;
   strncpy(trigraphptr, ciphertext, cipherlen);
   j = 0;
   for(i = 0; i < trigraphcount; i++)
     {
- 
+            
       strncpy(currenttrigraph, trigraphptr, 3);
+      if(previousloc != 0 && (currenttrigraph[0] < 65 || currenttrigraph[0] > 90))
+	{
+	  specialcount++;
+	}
       if(strncmp(currenttrigraph, trigraphs[highest], 3) == 0)
 	{
 	  if(previousloc != 0) 
 	    {
 	      currentloc = trigraphptr;
-	      distances[j] = (currentloc - previousloc);
+	      distances[j] = (currentloc - previousloc) - specialcount;
 	      j++;
+	      specialcount = 0;
 	    }
 	  previousloc = trigraphptr;
 	}
@@ -211,8 +216,8 @@ int main(int argc, char **argv)
     }
 
   fprintf(stdout, "\n");
-
-   int keylen = gcdr(distances[0], distances[1]);
+  
+  int keylen = gcdr(distances[0], distances[1]);
 
   fprintf(stdout, "Possible key length is %d\n", keylen);
   
@@ -269,6 +274,8 @@ int main(int argc, char **argv)
 	    }
 	}
 
+      //fprintf(stdout, "highfreq: %c at %d times\n", highfreqindex + 65, highfreq);
+
       int keypos = (highfreqindex - 4);
       int seckeypos = (sechighfreqindex - 4);
       int thirdkeypos = (thirdhighfreqindex - 4);
@@ -295,7 +302,6 @@ int main(int argc, char **argv)
   fprintf(stdout, "Third probable key is %s\n", thirdkey);
   fprintf(stdout, "Fourth probable key is %s\n", fourkey);
   fprintf(stdout, "Fifth probable key is %s\n", fifkey);
-  
-  // Decrypt
-  //  dictcheck("a", 1);
+
+  fprintf(stdout, "Try decrypting with possible keys.\n");
 }

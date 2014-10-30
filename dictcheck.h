@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#define MAXLEN 10000
+#define MAXLEN 100000
 
 /** \brief
  *thoughts:
@@ -46,7 +46,7 @@ size_t getcipherfile(char *s, size_t lim, FILE *fp)
       	{
 	  s[i] = x;
       	}
-       else
+      else
       	{
       	  s[i]=x;
       	}
