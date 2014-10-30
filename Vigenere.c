@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 		fprintf(stdout, "%zu ", distances[i]);
 	}
 	fprintf(stdout, "\n");
-	int keylen = gcdr(distances[0], distances[1]);
+	int keylen = mcgcd(distances, occurences[highest]);
 	fprintf(stdout, "Possible key length is %d\n", keylen);
 	// Frequncy analysis
 	char characters[26];

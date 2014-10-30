@@ -30,7 +30,7 @@ int gcdr(int a, int b)
 	}
 	return gcdr(b % a, a);
 }
-int mcgcd(int a[], int len)
+int mcgcd(size_t a[], int len)
 //returns the Most common GCD from the array of numbers
 //requires the array and the length of the array as inputs
 {
