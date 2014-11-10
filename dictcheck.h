@@ -68,61 +68,61 @@ size_t encrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *f
 	{
 		if(x > 64 && x < 91)
 		{
-			s[i] = mod((x - 65) + key[keyindex], 26) + 65;
-			// fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], x, s[i]);
-			if(keyindex == (keylen - 1))
-			{
-				keyindex = 0;
-			}
-			else
-			{
-				keyindex++;
-			}
+		  s[i] = mod((x - 65) + toupper(key[keyindex]), 26) + 65;
+		  // fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], x, s[i]);
+		  if(keyindex == (keylen - 1))
+		    {
+		      keyindex = 0;
+		    }
+		  else
+		    {
+		      keyindex++;
+		    }
 		}
 		else
-		{
-			s[i] = x;
-		}
+		  {
+		    s[i] = x;
+		  }
 	}
 	if(x == '\n')
-	{
-		s[i] = x;
-		++i;
-	}
+	  {
+	    s[i] = x;
+	    ++i;
+	  }
 	s[i] = '\0';
 	return i;
 }
 
 size_t decrypt(char *s, char *key, int keyindex, int keylen, size_t lim, FILE *fp)
 {
-	int y, i;
-	for(i = 0; i < (lim - 1) && (y = toupper(getc(fp))) != EOF && y != '\n'; ++i)
+  int y, i;
+  for(i = 0; i < (lim - 1) && (y = toupper(getc(fp))) != EOF && y != '\n'; ++i)
+    {
+      if(y > 64 && y < 91)
 	{
-		if(y > 64 && y < 91)
-		{
-			s[i] = mod((y - 65) - key[keyindex], 26) + 65;
-			//	  fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], y, s[i]);
-			if(keyindex == (keylen - 1))
-			{
-				keyindex = 0;
-			}
-			else
-			{
-				keyindex++;
-			}
-		}
-		else
-		{
-			s[i] = y;
-		}
+	  s[i] = mod((y - 65) - toupper(key[keyindex]), 26) + 65;
+	  //	  fprintf(stdout, "keychar is %c and %c goes to %c\n", key[keyindex], y, s[i]);
+	  if(keyindex == (keylen - 1))
+	    {
+	      keyindex = 0;
+	    }
+	  else
+	    {
+	      keyindex++;
+	    }
 	}
-	if(y == '\n')
+      else
 	{
-		s[i] = y;
-		++i;
+	  s[i] = y;
 	}
-	s[i] = '\0';
-	return i;
+    }
+  if(y == '\n')
+    {
+      s[i] = y;
+      ++i;
+    }
+  s[i] = '\0';
+  return i;
 }
 
 int dictcheck(char *s, size_t len)
