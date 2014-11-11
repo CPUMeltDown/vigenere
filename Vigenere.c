@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 		exit(0);
 	}
 	// Break operation from here
-	// Copy text from cipher file into ciphertext string.                                                                                                                         \
+	// Copy text from cipher file into ciphertext string.
 	while((len = getcipherfile(buf, MAXLEN, fp)) > 0)
 	{
 		strncat(ciphertext, buf, strlen(buf));
@@ -131,8 +131,8 @@ int main(int argc, char **argv)
 	int highestcount = 0;
 	for(i = 0; i < trigraphcount; i++)
 	{
-		//      fprintf(stdout, "Occurence %d is %s with %zu occurences.\n", i+1, trigraphs[i], occurences[i]);
-		// fprintf(stdout, "Highest now is %d\n", highest);
+		//fprintf(stdout, "Occurence %d is %s with %zu occurences.\n", i+1, trigraphs[i], occurences[i]);
+		//fprintf(stdout, "Highest now is %d\n", highest);
 		if(occurences[i] > highestcount)
 		{
 			//  fprintf(stdout, "Occurence %zu is %s\n", occurences[i], trigraphs[i]);
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 	}
 	for(i = 0; i < occurences[highest] - 1; i++)
 	{
-		fprintf(stdout, "%zu ", distances[i]);
+		fprintf(stdout, "%d ", distances[i]);
 	}
 	fprintf(stdout, "\n");
 	int keylen = mcgcd(distances, occurences[highest]);
